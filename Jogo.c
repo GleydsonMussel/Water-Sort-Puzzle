@@ -9,7 +9,7 @@
     #include <unistd.h>
 #endif
 
-// Definição do número de fases desejadas
+// Definição do número de fases desejadas (Para agilizar o teste, setar NFasesDesejadas = 1)
 #define NFasesDesejadas 3
 
 // Definição do tamanho do texto de preecnhimento
@@ -382,25 +382,7 @@ int main(){
 
     // INÍCIO DO JOGO
 
-    while (Vitoria<NFasesDesejadas && desejoJogar=='s' || desejoJogar=='S'){
-
-        // Caso Vitoria != 0, significa que mudou de Fase, logo, é necessário perguntar novamente se a pessoa quer ou não jogar, da 2° Fase em diante, esse ciclo se autosustenta
-        if (Vitoria!=0){
-            
-            // Quebra de lionha para melhorar a visualização dos elementos da fase
-            printf("\n");
-
-            // Pego o \n lixo que vem que possa vir
-            scanf("%c", &trash);
-            
-            // Garanto que sempre estes texto ficarão na mesma cor: branco
-            reset();
-
-            // Confirma se o jogador deseja jogar
-            printf("Deseja continuar jogando ? [S/N]: ");
-            scanf("%c", &desejoJogar);
-         
-        }
+    while (Vitoria!=NFasesDesejadas && desejoJogar=='s' || desejoJogar=='S'){
         
         // Declaro a variável responsável por identificar quando uma fase é concluída
         int valorInicialVitoria=Vitoria;
@@ -459,6 +441,28 @@ int main(){
 
         }
 
+        // Caso Vitoria != 0, significa que mudou de Fase, logo, é necessário perguntar novamente se a pessoa quer ou não jogar, da 2° Fase em diante, esse ciclo se autosustenta
+        if (Vitoria!=0){
+            
+            // Quebra de lionha para melhorar a visualização dos elementos da fase
+            printf("\n");
+
+            // Pego o \n lixo que vem que possa vir
+            scanf("%c", &trash);
+            
+            // Garanto que sempre estes texto ficarão na mesma cor: branco
+            reset();
+
+            printf("Val Vitoria: %d\n", Vitoria);
+
+            printf("Val NfasesDesejadas: %d\n", NFasesDesejadas);
+
+            // Confirma se o jogador deseja jogar
+            printf("Deseja continuar jogando ? [S/N]: ");
+            scanf("%c", &desejoJogar);
+         
+        }
+
         // Printo a fase em que o jogador está:
         printf("\nFASE %d\n\n", Fase+1);
 
@@ -500,12 +504,13 @@ int main(){
             #endif
 
         }
+        
     }
 
     // Se o loop do jogo quebrou porque o usuário passou das 3 fases, coloco um vídeo para comemorar sua vitória 
     if(Vitoria==NFasesDesejadas){
 
-        printf("Parabens...");
+        printf("Você Conluiiu todas as fases PARABENS...");
 
         #ifdef _WIN32 || _WIN64
             // Windows
@@ -543,4 +548,4 @@ int main(){
    return 0;
         
 }
-    
+     
