@@ -1,5 +1,14 @@
+// Include das bibliotecas padrão
 #include <stdio.h>
 #include <stdlib.h>
+
+// Include das bibliotecas para o sleep funcionar
+#ifdef _WIN32 || _WIN64
+    #include <Windows.h>
+#else
+    #include <unistd.h>
+#endif
+
 // Definição do tamanho do texto de preecnhimento
 #define TamPreenchimento 9
 
@@ -198,6 +207,8 @@ void Transfere(Jogo tabuleiro,int idFrascoOrigin, int idFrascoDestiny){
 
             if (tabuleiro.frascos[i].id==idFrascoOrigin){
                 indiceFrascoOrigin=i;
+                // Teste se entrou aqui
+                printf("\nEntrei em Transfere no For do idFrascoOrigin\n");
                 break;
             }
 
@@ -208,6 +219,8 @@ void Transfere(Jogo tabuleiro,int idFrascoOrigin, int idFrascoDestiny){
 
             if (tabuleiro.frascos[i].id==idFrascoDestiny){
                 indiceFrascoDestiny=i;
+                // Teste se entrou aqui
+                printf("\nEntrei em Transfere no For do idFrascoDestiny\n");
                 break;
             }
 
@@ -240,6 +253,9 @@ void Transfere(Jogo tabuleiro,int idFrascoOrigin, int idFrascoDestiny){
             }
             
         }
+        else{
+            printf("\n\nMovimento inválido\n\n");
+        }
 
 }
 
@@ -258,11 +274,14 @@ int main(){
 
     int turnos=0;
 
+    int idFrascoOrigin, idFrascoDestiny;
+
     // Variável para controlar o índice dos frascos gerados em tabuleiro
     int frascoGerado=0;
 
     // Controlo quantas camadas de substância foram geradas
     int Ncamadas; 
+
     // Vetor para controlar od indices já sorteados
     int idsJaSOrteados[NfrascosJogo];
 
@@ -340,7 +359,39 @@ int main(){
             printf("FASE %d\n\n", Fase+1);
 
         }
+
+        // Printo os frascos exixtentes no tabuleiro
+        for(int i=0; i<=(NfrascosJogo/2 + 2*Vitoria);i++){
+
+            printFrasco(tabuleiro.frascos[i]);
+
+        }
         
+        // Pego de qual frasco o jogador deseja transferir
+        printf("Digite o id do frasco de onde água será transferida: ");
+        scanf("%d", &idFrascoOrigin);
+       
+        // Pego para qual frasco o jogador deseja transferir
+        printf("\nDigite o id do frasco para onde água será transferida: ");
+        scanf("%d", &idFrascoDestiny);
+
+        // Tento efetuar a transferência
+        Transfere(tabuleiro,idFrascoOrigin,idFrascoDestiny);
+
+        // Dou um sleep de 1 segundo para o usuário poder ler o resultado de seu movimento, se foi válido ou não
+
+        #ifdef _WIN32 || _WIN64
+            // Windows
+            Sleep(3000); // Sleep 1 segundo
+            //Sleep(500); // Sleep 0,5 segundo
+
+        #else
+            // Linux
+            sleep(3); // Sleep 1 segundo
+            //usleep(500*1000);  // Sleep 0,5 segundo (500 milisegundos)
+            
+        #endif
+
         // Testando se os frascos estão sendo gerados corretamente
 
         /*
@@ -355,8 +406,7 @@ int main(){
         }
         */
 
-       // Testando como os frascos ficam impressos
-       printFrasco(tabuleiro.frascos[turnos]);
+       
        
 
         if (turnos==NfrascosJogo/2 ){
