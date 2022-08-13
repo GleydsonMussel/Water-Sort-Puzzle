@@ -253,49 +253,21 @@ Jogo Transfere(Jogo tabuleiro,int idFrascoOrigin, int idFrascoDestiny){
 
             // Esvazio aquela camada do vetor de orígem
             tabuleiro.frascos[indiceFrascoOrigin].subsFrasco[ultimaCamadaPreenchidaOrigin]='n';
-
-            // Printo os frascos exixtentes no tabuleiro
-            /*for(int i=0; i<=(NfrascosJogo/2 + 2*Vitoria);i++){
-
-            printFrasco(tabuleiro.frascos[i]);
-
-            }*/
-
-            //int indiceUltimaSubsOrigin=TamSubsFrasco-1,indiceUltimaSubsDestiny=TamSubsFrasco-1;
-
-            // Coleto o index onde tem a última substância no frasco de orígem n == vazio, nada
-            /*while(tabuleiro.frascos[indiceFrascoOrigin].subsFrasco[indiceUltimaSubsOrigin]=='n'){
-
-                indiceUltimaSubsOrigin--;
-            }
-
-            // Coleto o index onde tem a última substância no frasco de destino
-              while(tabuleiro.frascos[indiceFrascoDestiny].subsFrasco[indiceFrascoDestiny]=='n'){
-
-                indiceUltimaSubsDestiny--;
-            }
-            
-           
-            if (tabuleiro.frascos[indiceFrascoOrigin].subsFrasco[indiceUltimaSubsOrigin]==tabuleiro.frascos[indiceFrascoDestiny].subsFrasco[indiceUltimaSubsDestiny]){
-
-                // Transfiro para o frasco de destino o que estava no de orígem
-                tabuleiro.frascos[indiceFrascoDestiny].subsFrasco[indiceUltimaSubsDestiny+1]=tabuleiro.frascos[indiceFrascoOrigin].subsFrasco[indiceUltimaSubsOrigin];
-
-                // Esvazio aquela camada do vetor de orígem
-                tabuleiro.frascos[indiceFrascoOrigin].subsFrasco[indiceUltimaSubsOrigin]='n';
-            }
-            */
             
         }
         
         else{
+
             printf("\n\nMovimento inválido\n\n");
+
         }
 
-        return tabuleiro;
         // Sempre após um movimento, checo se o usuário passou da fase ou não
         //checaVitoria();
 
+        // Para atualizar o tabuleiro a cada movimento, é necessário que a função retorne-o com as modificações que foram realizadas
+        return tabuleiro;
+        
 }
 
 /*int checaVitoria(){
@@ -411,6 +383,9 @@ int main(){
 
         }
         
+         // Garanto que sempre estes texto ficarão na mesma cor: branco
+        reset();
+        
         // Pego de qual frasco o jogador deseja transferir
         printf("Digite o id do frasco de onde água será transferida: ");
         scanf("%d", &idFrascoOrigin);
@@ -456,10 +431,6 @@ int main(){
         if (turnos==NfrascosJogo/2 ){
             break;
         }
-
-         
-        
-        
 
         turnos++; 
 
