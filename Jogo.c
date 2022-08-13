@@ -18,9 +18,6 @@
 // Definição do número máximo de frascos possíveis de existirem em um jogo: ideal: 10, setei agora 6, pois assim, serão gerados 3 Cheios e 2 Vazios na 1° rodada
 #define NfrascosJogo 12
 
-// Definição do número de frascos vazios máximo existente em cada jogo
-#define TamFrascosVazios 2
-
 // Definição do tamanho do nome do jogador
 #define TamJogador 100
 
@@ -247,12 +244,12 @@ void checaVitoria(Jogo tabuleiro, char jogador[]){
         // Dou um sleep de 2 segundos para o usuário poder aproveitar a vitória
         #ifdef _WIN32 || _WIN64
             // Windows
-            Sleep(2000); // Sleep 3 segundos
+            Sleep(4000); // Sleep 3 segundos
             //Sleep(500); // Sleep 0,5 segundo
 
             #else
             // Linux
-            sleep(2); // Sleep 1 segundo
+            sleep(4); // Sleep 1 segundo
             //usleep(500*1000);  // Sleep 0,5 segundo (500 milisegundos)
                 
             #endif
@@ -271,13 +268,11 @@ Jogo Transfere(Jogo tabuleiro,int idFrascoOrigin, int idFrascoDestiny, char joga
 
             if (tabuleiro.frascos[i].id==idFrascoOrigin){
                 indiceFrascoOrigin=i;
-                // Testo se entrou aqui
-    
+               
             }
 
             else if (tabuleiro.frascos[i].id==idFrascoDestiny){
                 indiceFrascoDestiny=i;
-                // Testo se entrou aqui
                 
             }
 
@@ -388,14 +383,14 @@ int main(){
             
             printf("\n");
 
-            // Pego o \n lixo que vem de cima
+            // Pego o \n lixo que vem que possa vir
             scanf("%c", &trash);
             
             // Garanto que sempre estes texto ficarão na mesma cor: branco
             reset();
 
             // Confirma se o jogador deseja jogar
-            printf("Deseja jogar ? [S/N]: ");
+            printf("Deseja continuar jogando ? [S/N]: ");
             scanf("%c", &desejoJogar);
          
         }
@@ -486,13 +481,12 @@ int main(){
 
             #ifdef _WIN32 || _WIN64
                 // Windows
-                Sleep(1000); // Sleep 3 segundos
-                //Sleep(500); // Sleep 0,5 segundo
+                Sleep(500); // Sleep 0,5 segundo
 
             #else
                 // Linux
-                sleep(1); // Sleep 1 segundo
-                //usleep(500*1000);  // Sleep 0,5 segundo (500 milisegundos)
+                //sleep(1); // Sleep 1 segundo
+                usleep(500*1000);  // Sleep 0,5 segundo (500 milisegundos)
                 
             #endif
 
