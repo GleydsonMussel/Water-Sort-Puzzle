@@ -198,7 +198,7 @@ char geraSubs(){
 
 }
 
-Jogo Transfere(Jogo tabuleiro,int idFrascoOrigin, int idFrascoDestiny){
+Jogo Transfere(Jogo tabuleiro,int idFrascoOrigin, int idFrascoDestiny, char jogador[]){
 
         int indiceFrascoOrigin,indiceFrascoDestiny;
         int primeiraCamadaVaziaDestiny, ultimaCamadaPreenchidaOrigin=5, pegouPrimeiraCamadaVaziaDestiny=5;
@@ -263,17 +263,67 @@ Jogo Transfere(Jogo tabuleiro,int idFrascoOrigin, int idFrascoDestiny){
         }
 
         // Sempre após um movimento, checo se o usuário passou da fase ou não
-        //checaVitoria();
+        //checaVitoria(tabuleiro, jogador);
 
         // Para atualizar o tabuleiro a cada movimento, é necessário que a função retorne-o com as modificações que foram realizadas
         return tabuleiro;
         
 }
 
-/*int checaVitoria(){
+void checaVitoria(Jogo tabuleiro, char jogador[]){
+
+    int nFrascosUniformes=0, nDiferencas=0;
+    char subsDaVez;
+
+    for(int i=0; i<nInicialFrascosPreenchidos;i++){
+
+        for(int j=0;j<TamSubsFrasco;j++){
+            
+            // Pego, no 1° loop, a cor da 1° substância
+            if (j==0){
+
+                subsDaVez=tabuleiro.frascos[i].subsFrasco[j];
+                continue;
+
+            }
+
+            // Caso alguma subtância do mesmo frasco tenha cor diferente, ou seja, seja diferente, dou update na variável que armazena a quanitdade de cores diferentes encontradas
+            else if(subsDaVez!=tabuleiro.frascos[i].subsFrasco[j]){
+
+                nDiferencas++;
+
+            }  
+
+        }
+
+        // Caso entre as substâncias do frasco não haja nenhuma dissonância/diferença, então dou update no número de frascos que estão uniformemente coloridos/preenchidos
+        if (nDiferencas==0){
+
+            nFrascosUniformes++;
+
+        }
+
+    }
+    
+    // Caso o jogador tenha conseguido organizar uniformemente um número de frascos == número incial de frascos que ele tinha, dependendo da fase em que estava, significa que ele organizou todos os frascos que precisava 
+    if(nFrascosUniformes==nInicialFrascosPreenchidos + Vitoria){
+
+        printf("Parabéns %s, você passou da Fase %d", jogador, Vitoria+1);
+
+        Vitoria++;
+
+        
+
+    }
+    else{
+        
+        // 0 == Não Vitória na fase (ainda pelo menos)
+        
+
+    }
 
 
-}*/
+}
 
 
 int main(){
@@ -301,6 +351,9 @@ int main(){
     // Vetor para controlar od indices já sorteados
     int idsJaSOrteados[NfrascosJogo];
 
+    // Declaro a variável responsável por identificar quando uma fase é concluída
+    int valorInicialVitoria=Vitoria;
+
     // Incialização do vetor de ids já sorteados, id==0 não é aceitável
     for (int i = 0; i < NfrascosJogo; i++){
 
@@ -321,6 +374,7 @@ int main(){
 
     // Posteriormente os frascos serão printados, logo, dou uma quebra de linha entre este texto e os frascos do jogo.
     printf("\n");
+
     
     //Gero os frascos a serem preenchidos
     for(frascoGerado=0; frascoGerado<=nInicialFrascosPreenchidos + Vitoria; frascoGerado++){
@@ -367,6 +421,7 @@ int main(){
 
     }
 
+    // ÍNÍCIO DA FASE
     while (Vitoria<=4 && desejoJogar=='s' || desejoJogar=='S') {
         
         if(turnos==0){
@@ -395,13 +450,13 @@ int main(){
         scanf("%d", &idFrascoDestiny);
 
         // Tento efetuar a transferência
-        tabuleiro=Transfere(tabuleiro,idFrascoOrigin,idFrascoDestiny);
+        tabuleiro=Transfere(tabuleiro,idFrascoOrigin,idFrascoDestiny, jogador);
 
         // Dou um sleep de 1 segundo para o usuário poder ler o resultado de seu movimento, se foi válido ou não
 
         #ifdef _WIN32 || _WIN64
             // Windows
-            Sleep(3000); // Sleep 1 segundo
+            Sleep(3000); // Sleep 3 segundos
             //Sleep(500); // Sleep 0,5 segundo
 
         #else
