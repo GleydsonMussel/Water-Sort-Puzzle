@@ -158,7 +158,7 @@ int geraId(int idsJaSorteados[], int indiceIdJaSorteado){
 
 char geraSubs(){
 
-    // Coloquei em loop para garantir que um número entre 0 e 7 será gerado
+    // Coloquei em loop para garantir que um número entre 0 e 7 será gerado para garantir que sempre serão geradas cores válidas para um dado frasco
     for(int i=0; i<100;i++){
 
         int corDaVez=rand()%10;
@@ -199,7 +199,7 @@ void checaVitoria(Jogo tabuleiro, char jogador[]){
             }
 
             // Caso alguma subtância do mesmo frasco tenha cor diferente, ou seja, seja diferente, dou update na variável que armazena a quanitdade de cores diferentes encontradas, nesse caso não considero n, vazio, como diferente,
-            // pois como todas as cores são geradas aleatoriamente dentro de um frasco, não posso assegurar que terão 4 camadas para cada subsyância no fim, logo, ignoro quando está vazio
+            // pois como todas as cores são geradas aleatoriamente dentro de um frasco, não posso assegurar que terão 4 camadas para cada substância no fim, logo, não considero vazio como algo "diferente"
             else if(subsDaVez!=tabuleiro.frascos[i].subsFrasco[j] && tabuleiro.frascos[i].subsFrasco[j]!='n' ){
 
                 nDiferencas++;
@@ -235,16 +235,14 @@ void checaVitoria(Jogo tabuleiro, char jogador[]){
         // Atualizo o número da fase 
         Fase++;
 
-        // Dou um sleep de 2 segundos para o usuário poder aproveitar a vitória
+        // Dou um sleep de 4 segundos para o usuário poder ler o texto e entender que ganhou
         #ifdef _WIN32 || _WIN64
             // Windows
             Sleep(4000); // Sleep 4 segundos
-            //Sleep(500); // Sleep 0,5 segundo
 
             #else
             // Linux
             sleep(4); // Sleep 4 segundos
-            //usleep(500*1000);  // Sleep 0,5 segundo (500 milisegundos)
                 
             #endif
 
@@ -315,15 +313,16 @@ Jogo Transfere(Jogo tabuleiro,int idFrascoOrigin, int idFrascoDestiny, char joga
         }
 
         else{
-            // Printo se o movimento foi válido ou não
+
+            // Printo se o movimento foi inválido
             printf("\nMovimento Inválido\n\n");
 
         }
 
-        // Sempre após um movimento, checo se o usuário passou da fase ou não
+        // Sempre após um movimento, checo se o jogador passou da fase ou não
         checaVitoria(tabuleiro, jogador);
 
-        // Para atualizar o tabuleiro a cada movimento, é necessário que a função retorne-o com as modificações que foram realizadas
+        // Para atualizar o tabuleiro a cada movimento, é necessário que a função retorne-o com as modificações que foram realizadas para a main
         return tabuleiro;
         
 }
@@ -331,18 +330,22 @@ Jogo Transfere(Jogo tabuleiro,int idFrascoOrigin, int idFrascoDestiny, char joga
 
 int main(){
 
+    // Declaração da função responsável por controlar acerca de todos os elementos do jogo
     Jogo tabuleiro;
 
+    // Declaro a variável para pegar o nome do jogador
     char jogador[TamJogador];
 
+    // Declaro a variável para pegar o desejo do jogador em jogar ou não
     char desejoJogar;
 
+    // Declaro uma variável responsável por garantir que, na leitura de strings, o \n lixo não seja empecilho
     char trash;
 
+    // Declaro a variável responsável por controlar quantos frascos gerados foram válidos, pois desejo assegurar que a fase tenha o número exato de frascos que eu estipulei 
     int frascosValidosGerados=0;
 
-    int turnos=0;
-
+    // Declaro as variáveis responsáveis por armazenar os ids dos frascos que o usuário deseja mover
     int idFrascoOrigin, idFrascoDestiny;
 
     // Variável para controlar o índice dos frascos gerados em tabuleiro
@@ -372,9 +375,10 @@ int main(){
 
     while (Vitoria<4 && desejoJogar=='s' || desejoJogar=='S'){
 
-        // Caso Vitoria != 0, significa que mudou de Fase, logo, é necessário perguntar novamente se a pessoa quer ou não jogar, da 2° Fase em diante, essa pergunta se autosustenta
+        // Caso Vitoria != 0, significa que mudou de Fase, logo, é necessário perguntar novamente se a pessoa quer ou não jogar, da 2° Fase em diante, esse ciclo se autosustenta
         if (Vitoria!=0){
             
+            // Quebra de lionha para melhorar a visualização dos elementos da fase
             printf("\n");
 
             // Pego o \n lixo que vem que possa vir
@@ -402,12 +406,13 @@ int main(){
         //Gero os frascos a serem preenchidos
         for(frascoGerado=0; frascoGerado<nInicialFrascosPreenchidos + Vitoria; frascoGerado++){
 
+            // Reseto Ncamadas a cada loop
             Ncamadas=0;
 
             // Crio o Id do frasco
             tabuleiro.frascos[frascoGerado].id=geraId(idsJaSOrteados,frascoGerado);
 
-            // Recheio cada frasco gerado com substâncias
+            // Recheio cada frasco gerado com substâncias a
             for(int j=0; j<TamSubsFrasco; j++){
 
                 tabuleiro.frascos[frascoGerado].subsFrasco[j]=geraSubs();
@@ -423,6 +428,7 @@ int main(){
         // Gero os frascos vazios
         for(int i=0; i<nInicialFrascosVazios+Vitoria; i++){
 
+            // Reseto Ncamadas a cada loop
             Ncamadas=0;
 
             // Crio o Id do frasco
@@ -448,6 +454,7 @@ int main(){
         printf("\nFASE %d\n\n", Fase+1);
 
         // ÍNÍCIO DA FASE
+
         while (valorInicialVitoria==Vitoria) {
 
             // Printo os frascos exixtentes no tabuleiro
@@ -479,7 +486,6 @@ int main(){
                 
             #else
                 // Linux
-                //sleep(1); // Sleep 1 segundo
                 usleep(500*1000);  // Sleep 0,5 segundo (500 milisegundos)
                 
             #endif
@@ -487,7 +493,10 @@ int main(){
         }
     }
 
+    // Se o loop do jogo quebrou porque o usuário passou das 3 fases, coloco um vídeo para comemorar sua vitória 
     if(Vitoria==4){
+
+        printf("Parabens...");
 
         #ifdef _WIN32 || _WIN64
             // Windows
@@ -500,17 +509,22 @@ int main(){
         #endif
 
     }
-    
+
+    // Se o loop do jogo quebrou porque o usuário não quis mais jogar, coloco um vídeo para demonstrar minha tristeza com o tal fato    
     else{
 
-        printf("O jogo é legal, deveria ter jogado.");
+        printf("Que pena, o jogo era legal...");
 
         #ifdef _WIN32 || _WIN64
+        
             // Windows
+            Sleep(500);
             system("start https://www.youtube.com/watch?v=gjD85J3ZOIs&ab_channel=AnisulOny"); 
                 
         #else
+
             // Linux
+            usleep(500*1000);
             system("xdg-open https://www.youtube.com/watch?v=gjD85J3ZOIs&ab_channel=AnisulOny"); 
                 
         #endif
