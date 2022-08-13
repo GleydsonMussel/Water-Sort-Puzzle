@@ -360,16 +360,16 @@ int main(){
     // Vetor para controlar od indices já sorteados
     int idsJaSOrteados[NfrascosJogo];
 
-    // Confirma se o jogador deseja jogar
-    printf("Deseja jogar ? [S/N]: ");
-    scanf("%c", &desejoJogar);
+    // Pego o nome do jogador
+    printf("Qual seu nome ? ");
+    scanf("%99[^\n]s", jogador);
 
     // Pego o \n lixo que vem de cima
     scanf("%c", &trash);
 
-    // Pego o nome do jogador
-    printf("Qual seu nome ? ");
-    scanf("%99[^\n]s", jogador);
+    // Confirma se o jogador deseja jogar
+    printf("Deseja jogar ? [S/N]: ");
+    scanf("%c", &desejoJogar);
 
     // Posteriormente os frascos serão printados, logo, dou uma quebra de linha entre este texto e os frascos do jogo.
     printf("\n");
@@ -497,7 +497,11 @@ int main(){
 
         printf("\nPARABÉNS VOCÊ ZERROOOOOOOOOOOOOOOUUUUUUUUUUUUUUUUUUUUO JOOOOOOOOOOOOOOOGGGGGGOOOOOOOOOOO");
 
+    }
+    else{
 
+        printf("O jogo é legal, deveria ter jogado.");
+        
     }
 
    return 0;
