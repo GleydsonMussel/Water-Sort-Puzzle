@@ -195,7 +195,7 @@ void checaVitoria(Jogo tabuleiro, char jogador[]){
     int nFrascosUniformes=0, nDiferencas=0;
     char subsDaVez;
 
-    for(int i=0; i<nInicialFrascosPreenchidos;i++){
+    for(int i=0; i<nInicialFrascosPreenchidos + Vitoria;i++){
 
         for(int j=0;j<TamSubsFrasco;j++){
             
@@ -386,7 +386,7 @@ int main(){
         // Caso Vitoria != 0, significa que mudou de Fase, logo, é necessário perguntar novamente se a pessoa quer ou não jogar, da 2° Fase em diante, essa pergunta se autosustenta
         if (Vitoria!=0){
             
-            printf("\n\n");
+            printf("\n");
 
             // Pego o \n lixo que vem de cima
             scanf("%c", &trash);
@@ -397,8 +397,7 @@ int main(){
             // Confirma se o jogador deseja jogar
             printf("Deseja jogar ? [S/N]: ");
             scanf("%c", &desejoJogar);
-    
-            
+         
         }
         
         // Declaro a variável responsável por identificar quando uma fase é concluída
@@ -498,6 +497,13 @@ int main(){
             #endif
 
         }
+    }
+
+    if(Vitoria==4){
+
+        printf("\nPARABÉNS VOCÊ ZERROOOOOOOOOOOOOOOUUUUUUUUUUUUUUUUUUUUO JOOOOOOOOOOOOOOOGGGGGGOOOOOOOOOOO");
+
+
     }
 
    return 0;
