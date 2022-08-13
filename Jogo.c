@@ -6,8 +6,11 @@
 // Definição de quantas substâncias cabem em um frasco
 #define TamSubsFrasco 4
 
-// Definição do número máximo de frascos possíveis de existirem em um jogo
+// Definição do número máximo de frascos possíveis de existirem em um jogo: ideal: 10, setei agora 6, pois assim, serão gerados 3 Cheios e 2 Vazios na 1° rodada
 #define NfrascosJogo 10
+
+// Definição do número de frascos vazios máximo existente em cada jogo
+#define TamFrascosVazios 2
 
 // Definição do tamanho do nome do jogador
 #define TamJogador 100
@@ -17,6 +20,12 @@ int Vitoria=0;
 
 // Var global que controla a fase em que o jogador está
 int Fase=0;
+
+// Var global que cserve de base o número de frascos preenchidos vigentes no jogo
+int nInicialFrascosPreenchidos=3;
+
+// Var global que cserve de base o número de frascos vazios vigentes no jogo
+int nInicialFrascosVazios=2;
 
 // Definição das structs a serem usados
 /*
@@ -60,36 +69,51 @@ void reset () {
 
 void printFrasco(Frasco frascoToPrint){
 
-    // Seto o texto de preenchimento padrão a ser usado
+    // Seto o texto de preenchimento padrão a ser usado pelo frascos 
     char textoPreenchimento[TamPreenchimento]="XXXXXXXX";
 
-    // Printo o id do frasco de uma vez para facilitar identificação
+    // Seto o texto de preenchimento padrão para indicar nada a ser usado pelo frascos 
+    char textoPreenchimentoVazio[TamPreenchimento]="00000000";
+
+    // Garanto que sempre que o id do frasco for impresso, este seja branco para facilitar identificação
+    reset();
+
+     // Printo o id do frasco de uma vez para facilitar identificação
     printf("Id do frasco: %d\n\n", frascoToPrint.id);
 
     // Printo o texto de preenchimento a ser colorido de acordo com o número de camadas que eu tenho no frasco
     for(int i=0; i<frascoToPrint.camadas; i++){
 
-        printf("%s\n",textoPreenchimento);
-
         switch (frascoToPrint.subsFrasco[i]){
 
             case 'v':
                 vermelho();
+                printf("%s\n",textoPreenchimento);
             break;
 
             case 'a':
                 amarelo();
+                printf("%s\n",textoPreenchimento);
             break;
 
             case 'r':
                 roxo();
+                printf("%s\n",textoPreenchimento);
             break;
 
             case 'c':
                 ciano();
-            break;    
+                printf("%s\n",textoPreenchimento);
+            break;  
+
+            case 'n':
+                reset();
+                printf("%s\n",textoPreenchimentoVazio);
+            break;  
 
         }
+
+        
     
     }
 
@@ -100,7 +124,7 @@ void printFrasco(Frasco frascoToPrint){
 
 int geraId(int idsJaSorteados[], int indiceIdJaSorteado){
 
-    for (int i=0; i<=NfrascosJogo/2 + Vitoria; i++){
+    for (int i=0; i<=nInicialFrascosPreenchidos + Vitoria; i++){
 
         // Var para controlar se o id gerado é válido
         int idNaoSorteado=1;
@@ -109,7 +133,7 @@ int geraId(int idsJaSorteados[], int indiceIdJaSorteado){
         int idDaVez=rand()%10;
 
         // Confiro se o id já foi gerado anteriormente
-        for(int j=0; j<=NfrascosJogo/2 + Vitoria; j++){
+        for(int j=0; j<=nInicialFrascosPreenchidos + Vitoria; j++){
             
             // Se o id do frasco já foi gerado ou é zero, quebro o loop interno e gero outro número para testar
             if(idDaVez==idsJaSorteados[j] || idDaVez==0){
@@ -170,7 +194,7 @@ void Transfere(Jogo tabuleiro,int idFrascoOrigin, int idFrascoDestiny){
         int indiceFrascoOrigin,indiceFrascoDestiny;
 
         // Cato, dentro do tabuleiro, o índice do frasco de orígem
-        for(int i=NfrascosJogo/2 + Vitoria; i>=0; i--){
+        for(int i=nInicialFrascosPreenchidos + Vitoria; i>=0; i--){
 
             if (tabuleiro.frascos[i].id==idFrascoOrigin){
                 indiceFrascoOrigin=i;
@@ -180,7 +204,7 @@ void Transfere(Jogo tabuleiro,int idFrascoOrigin, int idFrascoDestiny){
         }
 
         // Cato, dentro do tabuleiro, o índice do frasco de destino
-        for(int i=NfrascosJogo/2 + Vitoria; i>=0; i--){
+        for(int i=nInicialFrascosPreenchidos + Vitoria; i>=0; i--){
 
             if (tabuleiro.frascos[i].id==idFrascoDestiny){
                 indiceFrascoDestiny=i;
@@ -234,6 +258,9 @@ int main(){
 
     int turnos=0;
 
+    // Variável para controlar o índice dos frascos gerados em tabuleiro
+    int frascoGerado=0;
+
     // Controlo quantas camadas de substância foram geradas
     int Ncamadas; 
     // Vetor para controlar od indices já sorteados
@@ -261,27 +288,58 @@ int main(){
     printf("\n");
     
     //Gero os frascos a serem preenchidos
-    for(int i=0; i<=NfrascosJogo/2 + Vitoria; i++){
+    for(frascoGerado=0; frascoGerado<=nInicialFrascosPreenchidos + Vitoria; frascoGerado++){
 
         Ncamadas=0;
 
-        tabuleiro.frascos[i].id=geraId(idsJaSOrteados,i);
+        // Crio o Id do frasco
+        tabuleiro.frascos[frascoGerado].id=geraId(idsJaSOrteados,frascoGerado);
 
+        // Recheio cada frasco gerado com substâncias
         for(int j=0; j<TamSubsFrasco; j++){
 
-            tabuleiro.frascos[i].subsFrasco[j]=geraSubs();
+            tabuleiro.frascos[frascoGerado].subsFrasco[j]=geraSubs();
 
             Ncamadas++;
         }
 
         // Seto quantas camadas preenchidas cada Frasco tem
-        tabuleiro.frascos[i].camadas=Ncamadas;
+        tabuleiro.frascos[frascoGerado].camadas=Ncamadas;
 
     }
 
-    // Gero as substâncias para rechear cada frasco 
+    // Gero os frascos vazios
+    for(int i=0; i<nInicialFrascosVazios+Vitoria; i++){
+
+        Ncamadas=0;
+
+        // Crio o Id do frasco
+        tabuleiro.frascos[frascoGerado].id=geraId(idsJaSOrteados,frascoGerado);
+
+        // Recheio cada frasco gerado com vazio
+        for(int j=0; j<TamSubsFrasco; j++){
+
+            tabuleiro.frascos[frascoGerado].subsFrasco[j]='n';
+
+            Ncamadas++;
+        }
+
+        // Seto quantas camadas preenchidas cada Frasco tem
+        tabuleiro.frascos[frascoGerado].camadas=Ncamadas;
+
+        // Dou update nos frascos gerados
+        frascoGerado++;
+
+    }
 
     while (Vitoria<=4 && desejoJogar=='s' || desejoJogar=='S') {
+        
+        if(turnos==0){
+
+            // Printo a fase em que o jogador está:
+            printf("FASE %d\n\n", Fase+1);
+
+        }
         
         // Testando se os frascos estão sendo gerados corretamente
 
@@ -297,12 +355,11 @@ int main(){
         }
         */
 
-
+       // Testando como os frascos ficam impressos
        printFrasco(tabuleiro.frascos[turnos]);
        
-       //printf("\n\n");
 
-        if (turnos==NfrascosJogo/2 - 1){
+        if (turnos==NfrascosJogo/2 ){
             break;
         }
         
@@ -310,7 +367,6 @@ int main(){
         turnos++; 
 
     }
-    
 
    return 0;
         
