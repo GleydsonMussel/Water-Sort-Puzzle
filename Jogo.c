@@ -91,7 +91,7 @@ void printFrasco(Frasco frascoToPrint){
     printf("Id do frasco: %d\n\n", frascoToPrint.id);
 
     // Printo o texto de preenchimento a ser colorido de acordo com o número de camadas que eu tenho no frasco
-    for(int i=0; i<frascoToPrint.camadas; i++){
+    for(int i=frascoToPrint.camadas-1; i>=0; i--){
 
         switch (frascoToPrint.subsFrasco[i]){
 
@@ -228,7 +228,7 @@ Jogo Transfere(Jogo tabuleiro,int idFrascoOrigin, int idFrascoDestiny){
             if (tabuleiro.frascos[indiceFrascoOrigin].subsFrasco[i]!='n'){
 
                 ultimaCamadaPreenchidaOrigin=i;
-                printf("\nAAAAAAA\n");
+                printf("\ni Origin: %d\n",i);
 
             }
             
@@ -237,6 +237,7 @@ Jogo Transfere(Jogo tabuleiro,int idFrascoOrigin, int idFrascoDestiny){
 
                 primeiraCamadaVaziaDestiny=i;
                 pegouPrimeiraCamadaVaziaDestiny=i;
+                printf("\ni Destiny: %d\n",i);
 
             }
 
@@ -470,3 +471,4 @@ int main(){
 
 
 }
+    
