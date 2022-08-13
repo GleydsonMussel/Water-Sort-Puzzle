@@ -9,6 +9,9 @@
     #include <unistd.h>
 #endif
 
+// Definição do número de fases desejadas
+#define NFasesDesejadas 3
+
 // Definição do tamanho do texto de preecnhimento
 #define TamPreenchimento 9
 
@@ -69,7 +72,13 @@ void reset () {
 void printFrasco(Frasco frascoToPrint){
 
     // Seto o texto de preenchimento padrão a ser usado pelo frascos 
-    char textoPreenchimento[TamPreenchimento]="XXXXXXXX";
+    char textoPreenchimentoVermelho[TamPreenchimento]="VVVVVVV";
+
+    char textoPreenchimentoAmarelo[TamPreenchimento]="AAAAAAA";
+
+    char textoPreenchimentoRoxo[TamPreenchimento]="RRRRRRR";
+
+    char textoPreenchimentoCiano[TamPreenchimento]="CCCCCCC";
 
     // Seto o texto de preenchimento padrão para indicar nada a ser usado pelo frascos 
     char textoPreenchimentoVazio[TamPreenchimento]="00000000";
@@ -87,22 +96,22 @@ void printFrasco(Frasco frascoToPrint){
 
             case 'v':
                 vermelho();
-                printf("%s\n",textoPreenchimento);
+                printf("%s\n",textoPreenchimentoVermelho);
             break;
 
             case 'a':
                 amarelo();
-                printf("%s\n",textoPreenchimento);
+                printf("%s\n",textoPreenchimentoAmarelo);
             break;
 
             case 'r':
                 roxo();
-                printf("%s\n",textoPreenchimento);
+                printf("%s\n",textoPreenchimentoRoxo);
             break;
 
             case 'c':
                 ciano();
-                printf("%s\n",textoPreenchimento);
+                printf("%s\n",textoPreenchimentoCiano);
             break;  
 
             case 'n':
@@ -125,8 +134,8 @@ int geraId(int idsJaSorteados[], int indiceIdJaSorteado){
         // Var para controlar se o id gerado é válido
         int idNaoSorteado=1;
 
-        // Sorteio o id de uma substância para preencher uma dada posição do frasco (0 a 10) 
-        int idDaVez=rand()%10;
+        // Sorteio o id de uma substância para preencher uma dada posição do frasco (0 a 100) 
+        int idDaVez=rand()%100;
 
         // Confiro se o id já foi gerado anteriormente
         for(int j=0; j<=nInicialFrascosPreenchidos + Vitoria; j++){
@@ -373,7 +382,7 @@ int main(){
 
     // INÍCIO DO JOGO
 
-    while (Vitoria<4 && desejoJogar=='s' || desejoJogar=='S'){
+    while (Vitoria<NFasesDesejadas && desejoJogar=='s' || desejoJogar=='S'){
 
         // Caso Vitoria != 0, significa que mudou de Fase, logo, é necessário perguntar novamente se a pessoa quer ou não jogar, da 2° Fase em diante, esse ciclo se autosustenta
         if (Vitoria!=0){
@@ -494,7 +503,7 @@ int main(){
     }
 
     // Se o loop do jogo quebrou porque o usuário passou das 3 fases, coloco um vídeo para comemorar sua vitória 
-    if(Vitoria==4){
+    if(Vitoria==NFasesDesejadas){
 
         printf("Parabens...");
 
