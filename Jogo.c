@@ -198,41 +198,72 @@ char geraSubs(){
 
 }
 
-void Transfere(Jogo tabuleiro,int idFrascoOrigin, int idFrascoDestiny){
+Jogo Transfere(Jogo tabuleiro,int idFrascoOrigin, int idFrascoDestiny){
 
         int indiceFrascoOrigin,indiceFrascoDestiny;
+        int primeiraCamadaVaziaDestiny, ultimaCamadaPreenchidaOrigin=5, pegouPrimeiraCamadaVaziaDestiny=5;
 
-        // Cato, dentro do tabuleiro, o índice do frasco de orígem
-        for(int i=nInicialFrascosPreenchidos + Vitoria; i>=0; i--){
+        // Cato, dentro do tabuleiro, os índices dos frasco de orígem e destino, respectivamente
+        for(int i=(NfrascosJogo/2 + 2 * Vitoria); i>=0; i--){
 
             if (tabuleiro.frascos[i].id==idFrascoOrigin){
                 indiceFrascoOrigin=i;
-                // Teste se entrou aqui
+                // Testo se entrou aqui
                 printf("\nEntrei em Transfere no For do idFrascoOrigin\n");
-                break;
+    
             }
 
-        }
-
-        // Cato, dentro do tabuleiro, o índice do frasco de destino
-        for(int i=nInicialFrascosPreenchidos + Vitoria; i>=0; i--){
-
-            if (tabuleiro.frascos[i].id==idFrascoDestiny){
+            else if (tabuleiro.frascos[i].id==idFrascoDestiny){
                 indiceFrascoDestiny=i;
-                // Teste se entrou aqui
+                // Testo se entrou aqui
                 printf("\nEntrei em Transfere no For do idFrascoDestiny\n");
-                break;
+                
             }
 
         }
 
-        // Consideradno que já há algo no frasco
-        if(tabuleiro.frascos[indiceFrascoDestiny].camadas<=3){
+        for(int i=0; i<TamSubsFrasco;i++){
+            
+            // Pego sempre a última camada que está preenchida no frasco de orígem, seto ultimaCamadaPreenchidaOrigin como 5 pois i nunca será 5, logo, se ela sair daqui como 5, significa que nenhuma camada está preenchida na orígem
+            if (tabuleiro.frascos[indiceFrascoOrigin].subsFrasco[i]!='n'){
 
-            int indiceUltimaSubsOrigin=TamSubsFrasco-1,indiceUltimaSubsDestiny=TamSubsFrasco-1;
+                ultimaCamadaPreenchidaOrigin=i;
+                printf("\nAAAAAAA\n");
+
+            }
+            
+            // Pego a primeira camada vazia no frasco de destino, seto pegouPrimeiraCamadaVaziaDestiny como 5 pois nunca i será 5, logo, se ela sair daqui com 5, significa que nenhuma camada do destino está livre
+            if(tabuleiro.frascos[indiceFrascoDestiny].subsFrasco[i]=='n' && pegouPrimeiraCamadaVaziaDestiny==5){
+
+                primeiraCamadaVaziaDestiny=i;
+                pegouPrimeiraCamadaVaziaDestiny=i;
+
+            }
+
+        }
+
+        // Testo se alguma camada vazia existe em Destiny
+        if(pegouPrimeiraCamadaVaziaDestiny!=5 && ultimaCamadaPreenchidaOrigin!=5){
+
+            printf("\nMovimento Válido\n\n");
+
+            // Transfiro para o frasco de destino o que estava no de orígem
+            tabuleiro.frascos[indiceFrascoDestiny].subsFrasco[primeiraCamadaVaziaDestiny]=tabuleiro.frascos[indiceFrascoOrigin].subsFrasco[ultimaCamadaPreenchidaOrigin];
+
+            // Esvazio aquela camada do vetor de orígem
+            tabuleiro.frascos[indiceFrascoOrigin].subsFrasco[ultimaCamadaPreenchidaOrigin]='n';
+
+            // Printo os frascos exixtentes no tabuleiro
+            /*for(int i=0; i<=(NfrascosJogo/2 + 2*Vitoria);i++){
+
+            printFrasco(tabuleiro.frascos[i]);
+
+            }*/
+
+            //int indiceUltimaSubsOrigin=TamSubsFrasco-1,indiceUltimaSubsDestiny=TamSubsFrasco-1;
 
             // Coleto o index onde tem a última substância no frasco de orígem n == vazio, nada
-            while(tabuleiro.frascos[indiceFrascoOrigin].subsFrasco[indiceUltimaSubsOrigin]=='n'){
+            /*while(tabuleiro.frascos[indiceFrascoOrigin].subsFrasco[indiceUltimaSubsOrigin]=='n'){
 
                 indiceUltimaSubsOrigin--;
             }
@@ -242,7 +273,8 @@ void Transfere(Jogo tabuleiro,int idFrascoOrigin, int idFrascoDestiny){
 
                 indiceUltimaSubsDestiny--;
             }
-
+            
+           
             if (tabuleiro.frascos[indiceFrascoOrigin].subsFrasco[indiceUltimaSubsOrigin]==tabuleiro.frascos[indiceFrascoDestiny].subsFrasco[indiceUltimaSubsDestiny]){
 
                 // Transfiro para o frasco de destino o que estava no de orígem
@@ -251,13 +283,24 @@ void Transfere(Jogo tabuleiro,int idFrascoOrigin, int idFrascoDestiny){
                 // Esvazio aquela camada do vetor de orígem
                 tabuleiro.frascos[indiceFrascoOrigin].subsFrasco[indiceUltimaSubsOrigin]='n';
             }
+            */
             
         }
+        
         else{
             printf("\n\nMovimento inválido\n\n");
         }
 
+        return tabuleiro;
+        // Sempre após um movimento, checo se o usuário passou da fase ou não
+        //checaVitoria();
+
 }
+
+/*int checaVitoria(){
+
+
+}*/
 
 
 int main(){
@@ -376,7 +419,7 @@ int main(){
         scanf("%d", &idFrascoDestiny);
 
         // Tento efetuar a transferência
-        Transfere(tabuleiro,idFrascoOrigin,idFrascoDestiny);
+        tabuleiro=Transfere(tabuleiro,idFrascoOrigin,idFrascoDestiny);
 
         // Dou um sleep de 1 segundo para o usuário poder ler o resultado de seu movimento, se foi válido ou não
 
@@ -412,6 +455,9 @@ int main(){
         if (turnos==NfrascosJogo/2 ){
             break;
         }
+
+         
+        
         
 
         turnos++; 
