@@ -16,7 +16,7 @@
 #define TamSubsFrasco 4
 
 // Definição do número máximo de frascos possíveis de existirem em um jogo: ideal: 10, setei agora 6, pois assim, serão gerados 3 Cheios e 2 Vazios na 1° rodada
-#define NfrascosJogo 10
+#define NfrascosJogo 12
 
 // Definição do número de frascos vazios máximo existente em cada jogo
 #define TamFrascosVazios 2
@@ -34,16 +34,10 @@ int Fase=0;
 int nInicialFrascosPreenchidos=3;
 
 // Var global que cserve de base o número de frascos vazios vigentes no jogo
-int nInicialFrascosVazios=2;
+int nInicialFrascosVazios=3;
 
 // Definição das structs a serem usados
-/*
-typedef struct  {
-    //int id;
-    char cor;
-    //char preenchimento[TamPreenchimento];
-} Substancia;
-*/
+
 typedef struct {
     int id;
     int camadas;
@@ -120,9 +114,7 @@ void printFrasco(Frasco frascoToPrint){
                 printf("%s\n",textoPreenchimentoVazio);
             break;  
 
-        }
-
-        
+        }  
     
     }
 
@@ -287,8 +279,9 @@ void checaVitoria(Jogo tabuleiro, char jogador[]){
 
             }
 
-            // Caso alguma subtância do mesmo frasco tenha cor diferente, ou seja, seja diferente, dou update na variável que armazena a quanitdade de cores diferentes encontradas
-            else if(subsDaVez!=tabuleiro.frascos[i].subsFrasco[j]){
+            // Caso alguma subtância do mesmo frasco tenha cor diferente, ou seja, seja diferente, dou update na variável que armazena a quanitdade de cores diferentes encontradas, nesse caso não considero n, vazio, como diferente,
+            // pois como todas as cores são geradas aleatoriamente dentro de um frasco, não posso assegurar que terão 4 camadas para cada subsyância no fim, logo, ignoro quando está vazio
+            else if(subsDaVez!=tabuleiro.frascos[i].subsFrasco[j] && tabuleiro.frascos[i].subsFrasco[j]!='n' ){
 
                 nDiferencas++;
 
@@ -377,7 +370,7 @@ int main(){
 
     
     //Gero os frascos a serem preenchidos
-    for(frascoGerado=0; frascoGerado<=nInicialFrascosPreenchidos + Vitoria; frascoGerado++){
+    for(frascoGerado=0; frascoGerado<nInicialFrascosPreenchidos + Vitoria; frascoGerado++){
 
         Ncamadas=0;
 
@@ -432,7 +425,7 @@ int main(){
         }
 
         // Printo os frascos exixtentes no tabuleiro
-        for(int i=0; i<=(NfrascosJogo/2 + 2*Vitoria);i++){
+        for(int i=0; i<(NfrascosJogo/2 + 2*Vitoria);i++){
 
             printFrasco(tabuleiro.frascos[i]);
 
