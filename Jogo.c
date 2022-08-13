@@ -190,78 +190,6 @@ char geraSubs(){
 
 }
 
-Jogo Transfere(Jogo tabuleiro,int idFrascoOrigin, int idFrascoDestiny, char jogador[]){
-
-        int indiceFrascoOrigin,indiceFrascoDestiny;
-        int primeiraCamadaVaziaDestiny, ultimaCamadaPreenchidaOrigin=5, pegouPrimeiraCamadaVaziaDestiny=5;
-
-        // Cato, dentro do tabuleiro, os índices dos frasco de orígem e destino, respectivamente
-        for(int i=(NfrascosJogo/2 + 2 * Vitoria); i>=0; i--){
-
-            if (tabuleiro.frascos[i].id==idFrascoOrigin){
-                indiceFrascoOrigin=i;
-                // Testo se entrou aqui
-                printf("\nEntrei em Transfere no For do idFrascoOrigin\n");
-    
-            }
-
-            else if (tabuleiro.frascos[i].id==idFrascoDestiny){
-                indiceFrascoDestiny=i;
-                // Testo se entrou aqui
-                printf("\nEntrei em Transfere no For do idFrascoDestiny\n");
-                
-            }
-
-        }
-
-        for(int i=0; i<TamSubsFrasco;i++){
-            
-            // Pego sempre a última camada que está preenchida no frasco de orígem, seto ultimaCamadaPreenchidaOrigin como 5 pois i nunca será 5, logo, se ela sair daqui como 5, significa que nenhuma camada está preenchida na orígem
-            if (tabuleiro.frascos[indiceFrascoOrigin].subsFrasco[i]!='n'){
-
-                ultimaCamadaPreenchidaOrigin=i;
-                printf("\ni Origin: %d\n",i);
-
-            }
-            
-            // Pego a primeira camada vazia no frasco de destino, seto pegouPrimeiraCamadaVaziaDestiny como 5 pois nunca i será 5, logo, se ela sair daqui com 5, significa que nenhuma camada do destino está livre
-            if(tabuleiro.frascos[indiceFrascoDestiny].subsFrasco[i]=='n' && pegouPrimeiraCamadaVaziaDestiny==5){
-
-                primeiraCamadaVaziaDestiny=i;
-                pegouPrimeiraCamadaVaziaDestiny=i;
-                printf("\ni Destiny: %d\n",i);
-
-            }
-
-        }
-
-        // Testo se alguma camada vazia existe em Destiny
-        if(pegouPrimeiraCamadaVaziaDestiny!=5 && ultimaCamadaPreenchidaOrigin!=5){
-
-            printf("\nMovimento Válido\n\n");
-
-            // Transfiro para o frasco de destino o que estava no de orígem
-            tabuleiro.frascos[indiceFrascoDestiny].subsFrasco[primeiraCamadaVaziaDestiny]=tabuleiro.frascos[indiceFrascoOrigin].subsFrasco[ultimaCamadaPreenchidaOrigin];
-
-            // Esvazio aquela camada do vetor de orígem
-            tabuleiro.frascos[indiceFrascoOrigin].subsFrasco[ultimaCamadaPreenchidaOrigin]='n';
-            
-        }
-        
-        else{
-
-            printf("\n\nMovimento inválido\n\n");
-
-        }
-
-        // Sempre após um movimento, checo se o usuário passou da fase ou não
-        //checaVitoria(tabuleiro, jogador);
-
-        // Para atualizar o tabuleiro a cada movimento, é necessário que a função retorne-o com as modificações que foram realizadas
-        return tabuleiro;
-        
-}
-
 void checaVitoria(Jogo tabuleiro, char jogador[]){
 
     int nFrascosUniformes=0, nDiferencas=0;
@@ -301,21 +229,114 @@ void checaVitoria(Jogo tabuleiro, char jogador[]){
     // Caso o jogador tenha conseguido organizar uniformemente um número de frascos == número incial de frascos que ele tinha, dependendo da fase em que estava, significa que ele organizou todos os frascos que precisava 
     if(nFrascosUniformes==nInicialFrascosPreenchidos + Vitoria){
 
-        printf("Parabéns %s, você passou da Fase %d", jogador, Vitoria+1);
+        printf("Parabéns %s, você passou da Fase %d\n\n", jogador, Vitoria+1);
 
+        // Printo os frascos exixtentes no tabuleiro para o jogador entender porque venceu
+        for(int i=0; i<(NfrascosJogo/2 + 2*Vitoria);i++){
+
+            printFrasco(tabuleiro.frascos[i]);
+
+        }
+
+        // Atualizar a variável global aqui fará com que a fase atual se encerre e o jogador passe para a próxima
         Vitoria++;
-
         
+        // Atualizo o número da fase 
+        Fase++;
+
+        // Dou um sleep de 2 segundos para o usuário poder aproveitar a vitória
+        #ifdef _WIN32 || _WIN64
+            // Windows
+            Sleep(2000); // Sleep 3 segundos
+            //Sleep(500); // Sleep 0,5 segundo
+
+            #else
+            // Linux
+            sleep(2); // Sleep 1 segundo
+            //usleep(500*1000);  // Sleep 0,5 segundo (500 milisegundos)
+                
+            #endif
 
     }
-    else{
+
+}
+
+Jogo Transfere(Jogo tabuleiro,int idFrascoOrigin, int idFrascoDestiny, char jogador[]){
+
+        int indiceFrascoOrigin=-1,indiceFrascoDestiny=-1;
+        int primeiraCamadaVaziaDestiny, ultimaCamadaPreenchidaOrigin=5, pegouPrimeiraCamadaVaziaDestiny=5;
+
+        // Cato, dentro do tabuleiro, os índices dos frasco de orígem e destino, respectivamente
+        for(int i=(NfrascosJogo/2 + 2 * Vitoria); i>=0; i--){
+
+            if (tabuleiro.frascos[i].id==idFrascoOrigin){
+                indiceFrascoOrigin=i;
+                // Testo se entrou aqui
+    
+            }
+
+            else if (tabuleiro.frascos[i].id==idFrascoDestiny){
+                indiceFrascoDestiny=i;
+                // Testo se entrou aqui
+                
+            }
+
+        }
+
+        // Caso nenhum um dos ids exista, já retorno o tabuleiro sem modificações para evitar erros posteriores
+        if (indiceFrascoOrigin==-1 || indiceFrascoOrigin==-1 ){
+
+             printf("\nMovimento Inválido\n\n");
+
+            // Se for inválido, retorno o tabuleiro sem nenhuma alteração para garantir o fluxo do programa
+            return tabuleiro;
         
-        // 0 == Não Vitória na fase (ainda pelo menos)
+        }
         
+        for(int i=0; i<TamSubsFrasco;i++){
+            
+            // Pego sempre a última camada que está preenchida no frasco de orígem, seto ultimaCamadaPreenchidaOrigin como 5 pois i nunca será 5, logo, se ela sair daqui como 5, significa que nenhuma camada está preenchida na orígem
+            if (tabuleiro.frascos[indiceFrascoOrigin].subsFrasco[i]!='n'){
 
-    }
+                ultimaCamadaPreenchidaOrigin=i;
 
+            }
+            
+            // Pego a primeira camada vazia no frasco de destino, seto pegouPrimeiraCamadaVaziaDestiny como 5 pois nunca i será 5, logo, se ela sair daqui com 5, significa que nenhuma camada do destino está livre
+            if(tabuleiro.frascos[indiceFrascoDestiny].subsFrasco[i]=='n' && pegouPrimeiraCamadaVaziaDestiny==5){
 
+                primeiraCamadaVaziaDestiny=i;
+                pegouPrimeiraCamadaVaziaDestiny=i;
+
+            }
+
+        }
+
+        // Testo se alguma camada vazia existe em Destiny
+        if(pegouPrimeiraCamadaVaziaDestiny!=5 && ultimaCamadaPreenchidaOrigin!=5){
+
+            printf("\nMovimento Válido\n\n");
+
+            // Transfiro para o frasco de destino o que estava no de orígem
+            tabuleiro.frascos[indiceFrascoDestiny].subsFrasco[primeiraCamadaVaziaDestiny]=tabuleiro.frascos[indiceFrascoOrigin].subsFrasco[ultimaCamadaPreenchidaOrigin];
+
+            // Esvazio aquela camada do vetor de orígem
+            tabuleiro.frascos[indiceFrascoOrigin].subsFrasco[ultimaCamadaPreenchidaOrigin]='n';
+            
+        }
+
+        else{
+
+            printf("\nMovimento Inválido\n\n");
+
+        }
+
+        // Sempre após um movimento, checo se o usuário passou da fase ou não
+        checaVitoria(tabuleiro, jogador);
+
+        // Para atualizar o tabuleiro a cada movimento, é necessário que a função retorne-o com as modificações que foram realizadas
+        return tabuleiro;
+        
 }
 
 
@@ -344,16 +365,6 @@ int main(){
     // Vetor para controlar od indices já sorteados
     int idsJaSOrteados[NfrascosJogo];
 
-    // Declaro a variável responsável por identificar quando uma fase é concluída
-    int valorInicialVitoria=Vitoria;
-
-    // Incialização do vetor de ids já sorteados, id==0 não é aceitável
-    for (int i = 0; i < NfrascosJogo; i++){
-
-        idsJaSOrteados[i]=0;
-
-    }
-    
     // Confirma se o jogador deseja jogar
     printf("Deseja jogar ? [S/N]: ");
     scanf("%c", &desejoJogar);
@@ -368,126 +379,128 @@ int main(){
     // Posteriormente os frascos serão printados, logo, dou uma quebra de linha entre este texto e os frascos do jogo.
     printf("\n");
 
-    
-    //Gero os frascos a serem preenchidos
-    for(frascoGerado=0; frascoGerado<nInicialFrascosPreenchidos + Vitoria; frascoGerado++){
+    // INÍCIO DO JOGO
 
-        Ncamadas=0;
+    while (Vitoria<4 && desejoJogar=='s' || desejoJogar=='S'){
 
-        // Crio o Id do frasco
-        tabuleiro.frascos[frascoGerado].id=geraId(idsJaSOrteados,frascoGerado);
-
-        // Recheio cada frasco gerado com substâncias
-        for(int j=0; j<TamSubsFrasco; j++){
-
-            tabuleiro.frascos[frascoGerado].subsFrasco[j]=geraSubs();
-
-            Ncamadas++;
-        }
-
-        // Seto quantas camadas preenchidas cada Frasco tem
-        tabuleiro.frascos[frascoGerado].camadas=Ncamadas;
-
-    }
-
-    // Gero os frascos vazios
-    for(int i=0; i<nInicialFrascosVazios+Vitoria; i++){
-
-        Ncamadas=0;
-
-        // Crio o Id do frasco
-        tabuleiro.frascos[frascoGerado].id=geraId(idsJaSOrteados,frascoGerado);
-
-        // Recheio cada frasco gerado com vazio
-        for(int j=0; j<TamSubsFrasco; j++){
-
-            tabuleiro.frascos[frascoGerado].subsFrasco[j]='n';
-
-            Ncamadas++;
-        }
-
-        // Seto quantas camadas preenchidas cada Frasco tem
-        tabuleiro.frascos[frascoGerado].camadas=Ncamadas;
-
-        // Dou update nos frascos gerados
-        frascoGerado++;
-
-    }
-
-    // ÍNÍCIO DA FASE
-    while (Vitoria<=4 && desejoJogar=='s' || desejoJogar=='S') {
-        
-        if(turnos==0){
-
-            // Printo a fase em que o jogador está:
-            printf("FASE %d\n\n", Fase+1);
-
-        }
-
-        // Printo os frascos exixtentes no tabuleiro
-        for(int i=0; i<(NfrascosJogo/2 + 2*Vitoria);i++){
-
-            printFrasco(tabuleiro.frascos[i]);
-
-        }
-        
-         // Garanto que sempre estes texto ficarão na mesma cor: branco
-        reset();
-        
-        // Pego de qual frasco o jogador deseja transferir
-        printf("Digite o id do frasco de onde água será transferida: ");
-        scanf("%d", &idFrascoOrigin);
-       
-        // Pego para qual frasco o jogador deseja transferir
-        printf("\nDigite o id do frasco para onde água será transferida: ");
-        scanf("%d", &idFrascoDestiny);
-
-        // Tento efetuar a transferência
-        tabuleiro=Transfere(tabuleiro,idFrascoOrigin,idFrascoDestiny, jogador);
-
-        // Dou um sleep de 1 segundo para o usuário poder ler o resultado de seu movimento, se foi válido ou não
-
-        #ifdef _WIN32 || _WIN64
-            // Windows
-            Sleep(3000); // Sleep 3 segundos
-            //Sleep(500); // Sleep 0,5 segundo
-
-        #else
-            // Linux
-            sleep(3); // Sleep 1 segundo
-            //usleep(500*1000);  // Sleep 0,5 segundo (500 milisegundos)
+        // Caso Vitoria != 0, significa que mudou de Fase, logo, é necessário perguntar novamente se a pessoa quer ou não jogar, da 2° Fase em diante, essa pergunta se autosustenta
+        if (Vitoria!=0){
             
-        #endif
+            printf("\n\n");
 
-        // Testando se os frascos estão sendo gerados corretamente
+            // Pego o \n lixo que vem de cima
+            scanf("%c", &trash);
+            
+            // Garanto que sempre estes texto ficarão na mesma cor: branco
+            reset();
 
-        /*
-        printf("Id do frasco %d: %d\n\n",turnos, tabuleiro.frascos[turnos].id);
+            // Confirma se o jogador deseja jogar
+            printf("Deseja jogar ? [S/N]: ");
+            scanf("%c", &desejoJogar);
+    
+            
+        }
+        
+        // Declaro a variável responsável por identificar quando uma fase é concluída
+        int valorInicialVitoria=Vitoria;
 
-        printf("Camadas do frasco %d: %d\n\n",turnos, tabuleiro.frascos[turnos].camadas);
+        // Incialização do vetor de ids já sorteados, id==0 não é aceitável
+        for (int i = 0; i < NfrascosJogo; i++){
 
-        for(int i=0; i<tabuleiro.frascos[turnos].camadas;i++){
-
-            printf("Cor do frasco %d em %d: %c\n",turnos, i, tabuleiro.frascos[turnos].subsFrasco[i]);
+            idsJaSOrteados[i]=0;
 
         }
-        */
+        
+        //Gero os frascos a serem preenchidos
+        for(frascoGerado=0; frascoGerado<nInicialFrascosPreenchidos + Vitoria; frascoGerado++){
 
-       
-       
+            Ncamadas=0;
 
-        if (turnos==NfrascosJogo/2 ){
-            break;
+            // Crio o Id do frasco
+            tabuleiro.frascos[frascoGerado].id=geraId(idsJaSOrteados,frascoGerado);
+
+            // Recheio cada frasco gerado com substâncias
+            for(int j=0; j<TamSubsFrasco; j++){
+
+                tabuleiro.frascos[frascoGerado].subsFrasco[j]=geraSubs();
+
+                Ncamadas++;
+            }
+
+            // Seto quantas camadas preenchidas cada Frasco tem
+            tabuleiro.frascos[frascoGerado].camadas=Ncamadas;
+
         }
 
-        turnos++; 
+        // Gero os frascos vazios
+        for(int i=0; i<nInicialFrascosVazios+Vitoria; i++){
 
+            Ncamadas=0;
+
+            // Crio o Id do frasco
+            tabuleiro.frascos[frascoGerado].id=geraId(idsJaSOrteados,frascoGerado);
+
+            // Recheio cada frasco gerado com vazio
+            for(int j=0; j<TamSubsFrasco; j++){
+
+                tabuleiro.frascos[frascoGerado].subsFrasco[j]='n';
+
+                Ncamadas++;
+            }
+
+            // Seto quantas camadas preenchidas cada Frasco tem
+            tabuleiro.frascos[frascoGerado].camadas=Ncamadas;
+
+            // Dou update nos frascos gerados
+            frascoGerado++;
+
+        }
+
+        // Printo a fase em que o jogador está:
+        printf("\nFASE %d\n\n", Fase+1);
+
+        // ÍNÍCIO DA FASE
+        while (valorInicialVitoria==Vitoria) {
+
+            // Printo os frascos exixtentes no tabuleiro
+            for(int i=0; i<(NfrascosJogo/2 + 2*Vitoria);i++){
+
+                printFrasco(tabuleiro.frascos[i]);
+
+            }
+            
+            // Garanto que sempre estes texto ficarão na mesma cor: branco
+            reset();
+            
+            // Pego de qual frasco o jogador deseja transferir
+            printf("Digite o id do frasco de onde água será transferida: ");
+            scanf("%d", &idFrascoOrigin);
+        
+            // Pego para qual frasco o jogador deseja transferir
+            printf("\nDigite o id do frasco para onde água será transferida: ");
+            scanf("%d", &idFrascoDestiny);
+
+            // Tento efetuar a transferência
+            tabuleiro=Transfere(tabuleiro,idFrascoOrigin,idFrascoDestiny, jogador);
+
+            // Dou um sleep de 1 segundo para o usuário poder ler o resultado de seu movimento, se foi válido ou não
+
+            #ifdef _WIN32 || _WIN64
+                // Windows
+                Sleep(1000); // Sleep 3 segundos
+                //Sleep(500); // Sleep 0,5 segundo
+
+            #else
+                // Linux
+                sleep(1); // Sleep 1 segundo
+                //usleep(500*1000);  // Sleep 0,5 segundo (500 milisegundos)
+                
+            #endif
+
+        }
     }
 
    return 0;
         
-
-
-
 }
     
