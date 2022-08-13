@@ -34,7 +34,6 @@ int nInicialFrascosPreenchidos=3;
 int nInicialFrascosVazios=3;
 
 // Definição das structs a serem usados
-
 typedef struct {
     int id;
     int camadas;
@@ -45,7 +44,7 @@ typedef struct{
     Frasco frascos[NfrascosJogo];
 } Jogo;
 
-// Cores a serem printadas:
+// Cores a serem printadas
 void vermelho () {
   printf("\033[1;31m");
 }
@@ -78,7 +77,7 @@ void printFrasco(Frasco frascoToPrint){
     // Garanto que sempre que o id do frasco for impresso, este seja branco para facilitar identificação
     reset();
 
-     // Printo o id do frasco de uma vez para facilitar identificação
+    // Printo o id do frasco de uma vez para facilitar identificação
     printf("Id do frasco: %d\n\n", frascoToPrint.id);
 
     // Printo o texto de preenchimento a ser colorido de acordo com o número de camadas que eu tenho no frasco
@@ -111,13 +110,12 @@ void printFrasco(Frasco frascoToPrint){
                 printf("%s\n",textoPreenchimentoVazio);
             break;  
 
-        }  
-    
+        } 
     }
 
     // Printo a quebra de linha de um frasco para outro, pois, geralmente, os frascos são printados todos de uma vez
     printf("\n");
-     
+
 }
 
 int geraId(int idsJaSorteados[], int indiceIdJaSorteado){
@@ -154,10 +152,8 @@ int geraId(int idsJaSorteados[], int indiceIdJaSorteado){
             idsJaSorteados[indiceIdJaSorteado]=idDaVez;
             return idDaVez;
             
-        }
-            
+        }          
     }
-    
 }
 
 char geraSubs(){
@@ -182,9 +178,7 @@ char geraSubs(){
         else  if (corDaVez==6 || corDaVez==7){
             return 'c';
         }
-
     }
-
 }
 
 void checaVitoria(Jogo tabuleiro, char jogador[]){
@@ -244,12 +238,12 @@ void checaVitoria(Jogo tabuleiro, char jogador[]){
         // Dou um sleep de 2 segundos para o usuário poder aproveitar a vitória
         #ifdef _WIN32 || _WIN64
             // Windows
-            Sleep(4000); // Sleep 3 segundos
+            Sleep(4000); // Sleep 4 segundos
             //Sleep(500); // Sleep 0,5 segundo
 
             #else
             // Linux
-            sleep(4); // Sleep 1 segundo
+            sleep(4); // Sleep 4 segundos
             //usleep(500*1000);  // Sleep 0,5 segundo (500 milisegundos)
                 
             #endif
@@ -321,7 +315,7 @@ Jogo Transfere(Jogo tabuleiro,int idFrascoOrigin, int idFrascoDestiny, char joga
         }
 
         else{
-
+            // Printo se o movimento foi válido ou não
             printf("\nMovimento Inválido\n\n");
 
         }
@@ -477,12 +471,12 @@ int main(){
             // Tento efetuar a transferência
             tabuleiro=Transfere(tabuleiro,idFrascoOrigin,idFrascoDestiny, jogador);
 
-            // Dou um sleep de 1 segundo para o usuário poder ler o resultado de seu movimento, se foi válido ou não
+            // Dou um sleep de 0,5 segundo para o usuário poder ler o resultado de seu movimento, se foi válido ou não
 
             #ifdef _WIN32 || _WIN64
                 // Windows
                 Sleep(500); // Sleep 0,5 segundo
-
+                
             #else
                 // Linux
                 //sleep(1); // Sleep 1 segundo
@@ -495,13 +489,32 @@ int main(){
 
     if(Vitoria==4){
 
-        printf("\nPARABÉNS VOCÊ ZERROOOOOOOOOOOOOOOUUUUUUUUUUUUUUUUUUUUO JOOOOOOOOOOOOOOOGGGGGGOOOOOOOOOOO");
+        #ifdef _WIN32 || _WIN64
+            // Windows
+            system("start https://www.youtube.com/watch?v=z37Vhpa5X5I&ab_channel=Gambiarra"); 
+                
+        #else
+            // Linux
+            system("xdg-open https://www.youtube.com/watch?v=z37Vhpa5X5I&ab_channel=Gambiarra"); 
+                
+        #endif
 
     }
+    
     else{
 
         printf("O jogo é legal, deveria ter jogado.");
-        
+
+        #ifdef _WIN32 || _WIN64
+            // Windows
+            system("start https://www.youtube.com/watch?v=gjD85J3ZOIs&ab_channel=AnisulOny"); 
+                
+        #else
+            // Linux
+            system("xdg-open https://www.youtube.com/watch?v=gjD85J3ZOIs&ab_channel=AnisulOny"); 
+                
+        #endif
+          
     }
 
    return 0;
