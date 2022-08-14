@@ -9,7 +9,7 @@
     #include <unistd.h>
 #endif
 
-// Definição do número de fases desejadas (Para agilizar o teste, setar NFasesDesejadas = 1)
+// Definição do número de fases desejadas (Para apresentar setar NFasesDesejadas = 0)
 #define NFasesDesejadas 3
 
 // Definição do tamanho do texto de preecnhimento
