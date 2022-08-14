@@ -10,7 +10,7 @@
 #endif
 
 // Definição do número de fases desejadas (Para agilizar o teste, setar NFasesDesejadas = 1)
-#define NFasesDesejadas 3
+#define NFasesDesejadas 2
 
 // Definição do tamanho do texto de preecnhimento
 #define TamPreenchimento 9
@@ -229,7 +229,7 @@ void checaVitoria(Jogo tabuleiro, char jogador[]){
     // Caso o jogador tenha conseguido organizar uniformemente um número de frascos == número incial de frascos que ele tinha, dependendo da fase em que estava, significa que ele organizou todos os frascos que precisava 
     if(nFrascosUniformes==nInicialFrascosPreenchidos + Vitoria){
 
-        printf("Parabéns %s, você passou da Fase %d\n\n", jogador, Vitoria+1);
+        printf("Parabens %s, voce passou da Fase %d\n\n", jogador, Vitoria+1);
 
         // Printo os frascos exixtentes no tabuleiro para o jogador entender porque venceu
         for(int i=0; i<(NfrascosJogo/2 + 2*Vitoria);i++){
@@ -311,7 +311,7 @@ Jogo Transfere(Jogo tabuleiro,int idFrascoOrigin, int idFrascoDestiny, char joga
         // Testo se alguma camada vazia existe em Destiny
         if(pegouPrimeiraCamadaVaziaDestiny!=5 && ultimaCamadaPreenchidaOrigin!=5){
 
-            printf("\nMovimento Válido\n\n");
+            printf("\nMovimento Valido\n\n");
 
             // Transfiro para o frasco de destino o que estava no de orígem
             tabuleiro.frascos[indiceFrascoDestiny].subsFrasco[primeiraCamadaVaziaDestiny]=tabuleiro.frascos[indiceFrascoOrigin].subsFrasco[ultimaCamadaPreenchidaOrigin];
@@ -324,7 +324,7 @@ Jogo Transfere(Jogo tabuleiro,int idFrascoOrigin, int idFrascoDestiny, char joga
         else{
 
             // Printo se o movimento foi inválido
-            printf("\nMovimento Inválido\n\n");
+            printf("\nMovimento Invalido\n\n");
 
         }
 
@@ -374,7 +374,7 @@ int main(){
     scanf("%c", &trash);
 
     // Confirma se o jogador deseja jogar
-    printf("Deseja jogar ? [S/N]: ");
+    printf("Deseja jogar ? [s/n]: ");
     scanf("%c", &desejoJogar);
 
     // Posteriormente os frascos serão printados, logo, dou uma quebra de linha entre este texto e os frascos do jogo.
@@ -382,7 +382,7 @@ int main(){
 
     // INÍCIO DO JOGO
 
-    while (Vitoria!=NFasesDesejadas && desejoJogar=='s' || desejoJogar=='S'){
+    while (Vitoria<NFasesDesejadas && (desejoJogar=='s' || desejoJogar=='S')){
         
         // Declaro a variável responsável por identificar quando uma fase é concluída
         int valorInicialVitoria=Vitoria;
@@ -441,28 +441,6 @@ int main(){
 
         }
 
-        // Caso Vitoria != 0, significa que mudou de Fase, logo, é necessário perguntar novamente se a pessoa quer ou não jogar, da 2° Fase em diante, esse ciclo se autosustenta
-        if (Vitoria!=0){
-            
-            // Quebra de lionha para melhorar a visualização dos elementos da fase
-            printf("\n");
-
-            // Pego o \n lixo que vem que possa vir
-            scanf("%c", &trash);
-            
-            // Garanto que sempre estes texto ficarão na mesma cor: branco
-            reset();
-
-            printf("Val Vitoria: %d\n", Vitoria);
-
-            printf("Val NfasesDesejadas: %d\n", NFasesDesejadas);
-
-            // Confirma se o jogador deseja jogar
-            printf("Deseja continuar jogando ? [S/N]: ");
-            scanf("%c", &desejoJogar);
-         
-        }
-
         // Printo a fase em que o jogador está:
         printf("\nFASE %d\n\n", Fase+1);
 
@@ -481,12 +459,12 @@ int main(){
             reset();
             
             // Pego de qual frasco o jogador deseja transferir
-            printf("Digite o id do frasco de onde água será transferida: ");
-            scanf("%d", &idFrascoOrigin);
+            printf("Digite o id do frasco de onde agua sera transferida: ");
+            scanf("%d%*c", &idFrascoOrigin);
         
             // Pego para qual frasco o jogador deseja transferir
-            printf("\nDigite o id do frasco para onde água será transferida: ");
-            scanf("%d", &idFrascoDestiny);
+            printf("\nDigite o id do frasco para onde agua sera transferida: ");
+            scanf("%d%*c", &idFrascoDestiny);
 
             // Tento efetuar a transferência
             tabuleiro=Transfere(tabuleiro,idFrascoOrigin,idFrascoDestiny, jogador);
@@ -504,13 +482,26 @@ int main(){
             #endif
 
         }
+
+        // Caso Vitoria != 0, significa que mudou de Fase, logo, é necessário perguntar novamente se a pessoa quer ou não jogar, da 2° Fase em diante, esse ciclo se autosustenta
+        if (Vitoria!=0){
+            
+            // Garanto que sempre estes texto ficarão na mesma cor: branco
+            reset();
+
+            // Confirma se o jogador deseja jogar
+            printf("Deseja continuar jogando ? [s/n]: ");
+            scanf("%c", &desejoJogar);
+         
+        }
         
     }
 
     // Se o loop do jogo quebrou porque o usuário passou das 3 fases, coloco um vídeo para comemorar sua vitória 
     if(Vitoria==NFasesDesejadas){
 
-        printf("Você Conluiiu todas as fases PARABENS...");
+        printf("\n");
+        printf("Voce Conluiiu Todas As Fases PARABENS...");
 
         #ifdef _WIN32 || _WIN64
             // Windows
@@ -527,6 +518,7 @@ int main(){
     // Se o loop do jogo quebrou porque o usuário não quis mais jogar, coloco um vídeo para demonstrar minha tristeza com o tal fato    
     else{
 
+        printf("\n");
         printf("Que pena, o jogo era legal...");
 
         #ifdef _WIN32 || _WIN64
