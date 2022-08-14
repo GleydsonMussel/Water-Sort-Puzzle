@@ -72,13 +72,13 @@ void reset () {
 void printFrasco(Frasco frascoToPrint){
 
     // Seto o texto de preenchimento padrão a ser usado pelo frascos 
-    char textoPreenchimentoVermelho[TamPreenchimento]="VVVVVVV";
+    char textoPreenchimentoVermelho[TamPreenchimento]="VVVVVVVV";
 
-    char textoPreenchimentoAmarelo[TamPreenchimento]="AAAAAAA";
+    char textoPreenchimentoAmarelo[TamPreenchimento]="AAAAAAAA";
 
-    char textoPreenchimentoRoxo[TamPreenchimento]="RRRRRRR";
+    char textoPreenchimentoRoxo[TamPreenchimento]="RRRRRRRR";
 
-    char textoPreenchimentoCiano[TamPreenchimento]="CCCCCCC";
+    char textoPreenchimentoCiano[TamPreenchimento]="CCCCCCCC";
 
     // Seto o texto de preenchimento padrão para indicar nada a ser usado pelo frascos 
     char textoPreenchimentoVazio[TamPreenchimento]="00000000";
