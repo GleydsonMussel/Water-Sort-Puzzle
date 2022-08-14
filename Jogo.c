@@ -10,7 +10,7 @@
 #endif
 
 // Definição do número de fases desejadas (Para agilizar o teste, setar NFasesDesejadas = 1)
-#define NFasesDesejadas 2
+#define NFasesDesejadas 3
 
 // Definição do tamanho do texto de preecnhimento
 #define TamPreenchimento 9
