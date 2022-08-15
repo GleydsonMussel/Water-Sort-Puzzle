@@ -71,7 +71,7 @@ void reset () {
 
 void printFrasco(Frasco frascoToPrint){
 
-    // Seto o texto de preenchimento padrão a ser usado pelo frascos 
+    // Seto o texto de preenchimento padrão a ser usado pelo frascos
     char textoPreenchimentoVermelho[TamPreenchimento]="VVVVVVVV";
 
     char textoPreenchimentoAmarelo[TamPreenchimento]="AAAAAAAA";
@@ -80,7 +80,7 @@ void printFrasco(Frasco frascoToPrint){
 
     char textoPreenchimentoCiano[TamPreenchimento]="CCCCCCCC";
 
-    // Seto o texto de preenchimento padrão para indicar nada a ser usado pelo frascos 
+    // Seto o texto de preenchimento padrão para indicar nada a ser usado pelo frascos
     char textoPreenchimentoVazio[TamPreenchimento]="00000000";
 
     // Garanto que sempre que o id do frasco for impresso, este seja branco para facilitar identificação
@@ -112,14 +112,14 @@ void printFrasco(Frasco frascoToPrint){
             case 'c':
                 ciano();
                 printf("%s\n",textoPreenchimentoCiano);
-            break;  
+            break;
 
             case 'n':
                 reset();
                 printf("%s\n",textoPreenchimentoVazio);
-            break;  
+            break;
 
-        } 
+        }
     }
 
     // Printo a quebra de linha de um frasco para outro, pois, geralmente, os frascos são printados todos de uma vez
@@ -134,12 +134,12 @@ int geraId(int idsJaSorteados[], int indiceIdJaSorteado){
         // Var para controlar se o id gerado é válido
         int idNaoSorteado=1;
 
-        // Sorteio o id de uma substância para preencher uma dada posição do frasco (0 a 100) 
+        // Sorteio o id de uma substância para preencher uma dada posição do frasco (0 a 100)
         int idDaVez=rand()%100;
 
         // Confiro se o id já foi gerado anteriormente
         for(int j=0; j<=nInicialFrascosPreenchidos + Vitoria; j++){
-            
+
             // Se o id do frasco já foi gerado ou é zero, quebro o loop interno e gero outro número para testar
             if(idDaVez==idsJaSorteados[j] || idDaVez==0){
 
@@ -160,8 +160,8 @@ int geraId(int idsJaSorteados[], int indiceIdJaSorteado){
 
             idsJaSorteados[indiceIdJaSorteado]=idDaVez;
             return idDaVez;
-            
-        }          
+
+        }
     }
 }
 
@@ -198,7 +198,7 @@ void checaVitoria(Jogo tabuleiro, char jogador[]){
     for(int i=0; i<nInicialFrascosPreenchidos + Vitoria;i++){
 
         for(int j=0;j<TamSubsFrasco;j++){
-            
+
             // Pego, no 1° loop, a cor da 1° substância
             if (j==0){
 
@@ -213,7 +213,7 @@ void checaVitoria(Jogo tabuleiro, char jogador[]){
 
                 nDiferencas++;
 
-            }  
+            }
 
         }
 
@@ -225,8 +225,8 @@ void checaVitoria(Jogo tabuleiro, char jogador[]){
         }
 
     }
-    
-    // Caso o jogador tenha conseguido organizar uniformemente um número de frascos == número incial de frascos que ele tinha, dependendo da fase em que estava, significa que ele organizou todos os frascos que precisava 
+
+    // Caso o jogador tenha conseguido organizar uniformemente um número de frascos == número incial de frascos que ele tinha, dependendo da fase em que estava, significa que ele organizou todos os frascos que precisava
     if(nFrascosUniformes==nInicialFrascosPreenchidos + Vitoria){
 
         printf("Parabens %s, voce passou da Fase %d\n\n", jogador, Vitoria+1);
@@ -240,8 +240,8 @@ void checaVitoria(Jogo tabuleiro, char jogador[]){
 
         // Atualizar a variável global aqui fará com que a fase atual se encerre e o jogador passe para a próxima
         Vitoria++;
-        
-        // Atualizo o número da fase 
+
+        // Atualizo o número da fase
         Fase++;
 
         // Dou um sleep de 4 segundos para o usuário poder ler o texto e entender que ganhou
@@ -252,7 +252,7 @@ void checaVitoria(Jogo tabuleiro, char jogador[]){
             #else
             // Linux
             sleep(4); // Sleep 4 segundos
-                
+
             #endif
 
     }
@@ -269,12 +269,12 @@ Jogo Transfere(Jogo tabuleiro,int idFrascoOrigin, int idFrascoDestiny, char joga
 
             if (tabuleiro.frascos[i].id==idFrascoOrigin){
                 indiceFrascoOrigin=i;
-               
+
             }
 
             else if (tabuleiro.frascos[i].id==idFrascoDestiny){
                 indiceFrascoDestiny=i;
-                
+
             }
 
         }
@@ -286,18 +286,18 @@ Jogo Transfere(Jogo tabuleiro,int idFrascoOrigin, int idFrascoDestiny, char joga
 
             // Se for inválido, retorno o tabuleiro sem nenhuma alteração para garantir o fluxo do programa
             return tabuleiro;
-        
+
         }
-        
+
         for(int i=0; i<TamSubsFrasco;i++){
-            
+
             // Pego sempre a última camada que está preenchida no frasco de orígem, seto ultimaCamadaPreenchidaOrigin como 5 pois i nunca será 5, logo, se ela sair daqui como 5, significa que nenhuma camada está preenchida na orígem
             if (tabuleiro.frascos[indiceFrascoOrigin].subsFrasco[i]!='n'){
 
                 ultimaCamadaPreenchidaOrigin=i;
 
             }
-            
+
             // Pego a primeira camada vazia no frasco de destino, seto pegouPrimeiraCamadaVaziaDestiny como 5 pois nunca i será 5, logo, se ela sair daqui com 5, significa que nenhuma camada do destino está livre
             if(tabuleiro.frascos[indiceFrascoDestiny].subsFrasco[i]=='n' && pegouPrimeiraCamadaVaziaDestiny==5){
 
@@ -318,7 +318,7 @@ Jogo Transfere(Jogo tabuleiro,int idFrascoOrigin, int idFrascoDestiny, char joga
 
             // Esvazio aquela camada do vetor de orígem
             tabuleiro.frascos[indiceFrascoOrigin].subsFrasco[ultimaCamadaPreenchidaOrigin]='n';
-            
+
         }
 
         else{
@@ -333,7 +333,7 @@ Jogo Transfere(Jogo tabuleiro,int idFrascoOrigin, int idFrascoDestiny, char joga
 
         // Para atualizar o tabuleiro a cada movimento, é necessário que a função retorne-o com as modificações que foram realizadas para a main
         return tabuleiro;
-        
+
 }
 
 
@@ -351,7 +351,7 @@ int main(){
     // Declaro uma variável responsável por garantir que, na leitura de strings, o \n lixo não seja empecilho
     char trash;
 
-    // Declaro a variável responsável por controlar quantos frascos gerados foram válidos, pois desejo assegurar que a fase tenha o número exato de frascos que eu estipulei 
+    // Declaro a variável responsável por controlar quantos frascos gerados foram válidos, pois desejo assegurar que a fase tenha o número exato de frascos que eu estipulei
     int frascosValidosGerados=0;
 
     // Declaro as variáveis responsáveis por armazenar os ids dos frascos que o usuário deseja mover
@@ -361,7 +361,7 @@ int main(){
     int frascoGerado=0;
 
     // Controlo quantas camadas de substância foram geradas
-    int Ncamadas; 
+    int Ncamadas;
 
     // Vetor para controlar od indices já sorteados
     int idsJaSOrteados[NfrascosJogo];
@@ -383,7 +383,7 @@ int main(){
     // INÍCIO DO JOGO
 
     while (Vitoria<NFasesDesejadas && (desejoJogar=='s' || desejoJogar=='S')){
-        
+
         // Declaro a variável responsável por identificar quando uma fase é concluída
         int valorInicialVitoria=Vitoria;
 
@@ -393,7 +393,7 @@ int main(){
             idsJaSOrteados[i]=0;
 
         }
-        
+
         //Gero os frascos a serem preenchidos
         for(frascoGerado=0; frascoGerado<nInicialFrascosPreenchidos + Vitoria; frascoGerado++){
 
@@ -454,14 +454,14 @@ int main(){
                 printFrasco(tabuleiro.frascos[i]);
 
             }
-            
+
             // Garanto que sempre estes texto ficarão na mesma cor: branco
             reset();
-            
+
             // Pego de qual frasco o jogador deseja transferir
             printf("Digite o id do frasco de onde agua sera transferida: ");
             scanf("%d%*c", &idFrascoOrigin);
-        
+
             // Pego para qual frasco o jogador deseja transferir
             printf("\nDigite o id do frasco para onde agua sera transferida: ");
             scanf("%d%*c", &idFrascoDestiny);
@@ -474,30 +474,35 @@ int main(){
             #ifdef _WIN32 || _WIN64
                 // Windows
                 Sleep(500); // Sleep 0,5 segundo
-                
+
             #else
                 // Linux
                 usleep(500*1000);  // Sleep 0,5 segundo (500 milisegundos)
-                
+
             #endif
 
         }
 
         // Caso Vitoria != 0, significa que mudou de Fase, logo, é necessário perguntar novamente se a pessoa quer ou não jogar, da 2° Fase em diante, esse ciclo se autosustenta
         if (Vitoria!=0){
-            
+
             // Garanto que sempre estes texto ficarão na mesma cor: branco
             reset();
+
+            // Evito que se o cara ganhou ele seja perguntado
+            if(Vitoria==NFasesDesejadas){
+                break;
+            }
 
             // Confirma se o jogador deseja jogar
             printf("Deseja continuar jogando ? [s/n]: ");
             scanf("%c", &desejoJogar);
-         
+
         }
-        
+
     }
 
-    // Se o loop do jogo quebrou porque o usuário passou das 3 fases, coloco um vídeo para comemorar sua vitória 
+    // Se o loop do jogo quebrou porque o usuário passou das 3 fases, coloco um vídeo para comemorar sua vitória
     if(Vitoria==NFasesDesejadas){
 
         printf("\n");
@@ -505,39 +510,38 @@ int main(){
 
         #ifdef _WIN32 || _WIN64
             // Windows
-            system("start https://www.youtube.com/watch?v=z37Vhpa5X5I&ab_channel=Gambiarra"); 
-                
+            system("start https://www.youtube.com/watch?v=z37Vhpa5X5I&ab_channel=Gambiarra");
+
         #else
             // Linux
-            system("xdg-open https://www.youtube.com/watch?v=z37Vhpa5X5I&ab_channel=Gambiarra"); 
-                
+            system("xdg-open https://www.youtube.com/watch?v=z37Vhpa5X5I&ab_channel=Gambiarra");
+
         #endif
 
     }
 
-    // Se o loop do jogo quebrou porque o usuário não quis mais jogar, coloco um vídeo para demonstrar minha tristeza com o tal fato    
+    // Se o loop do jogo quebrou porque o usuário não quis mais jogar, coloco um vídeo para demonstrar minha tristeza com o tal fato
     else{
 
         printf("\n");
         printf("Que pena, o jogo era legal...");
 
         #ifdef _WIN32 || _WIN64
-        
+
             // Windows
             Sleep(500);
-            system("start https://www.youtube.com/watch?v=gjD85J3ZOIs&ab_channel=AnisulOny"); 
-                
+            system("start https://www.youtube.com/watch?v=gjD85J3ZOIs&ab_channel=AnisulOny");
+
         #else
 
             // Linux
             usleep(500*1000);
-            system("xdg-open https://www.youtube.com/watch?v=gjD85J3ZOIs&ab_channel=AnisulOny"); 
-                
+            system("xdg-open https://www.youtube.com/watch?v=gjD85J3ZOIs&ab_channel=AnisulOny");
+
         #endif
-          
+
     }
 
    return 0;
-        
+
 }
-     
